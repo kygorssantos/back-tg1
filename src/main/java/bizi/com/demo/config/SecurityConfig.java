@@ -79,9 +79,9 @@ public class SecurityConfig {
                         .hasAnyAuthority("ROLE_CLIENTE", "ROLE_ADMIN")
 
                         .requestMatchers("/api/dependentes/**").hasAuthority("ROLE_FILHO")
-                        
+
                         .requestMatchers("/api/propostas/**").hasAuthority("ROLE_ADMIN")
-                        
+
                         .requestMatchers("/api/documentos/**").permitAll()
 
                         // 3. QUALQUER OUTRA ROTA
@@ -98,7 +98,8 @@ public class SecurityConfig {
 
         // DICA: Verifique se seu Angular não subiu na porta 8080 ou outra. 4200 é o
         // padrão.
-        config.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
+        config.setAllowedOrigins(
+                List.of("http://localhost:4200", "http://127.0.0.1:4200", "https://front-tg1.vercel.app"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
