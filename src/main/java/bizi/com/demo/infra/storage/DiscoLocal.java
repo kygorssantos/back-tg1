@@ -20,12 +20,13 @@ public class DiscoLocal implements Disco {
 
     @jakarta.annotation.PostConstruct
     public void init() {
-        // Se a raiz estiver vazia ou nula, entramos no PLANO B (Desktop)
+        // Se a raiz estiver vazia ou nula, entramos no PLANO B seguro
         if (this.raiz == null || this.raiz.trim().isEmpty()) {
-            String home = System.getProperty("user.home");
-            this.raiz = home + File.separator + "Desktop" + File.separator + "UpdateTg2Bizi" + File.separator
-                    + "DocumentosOnboarding";
-            System.out.println("⚠️ PLANO B: Usando caminho padrão no Desktop: " + this.raiz);
+            // ✅ CORREÇÃO: Usa a pasta temporária universal (/tmp no Linux ou Temp no
+            // Windows)
+            String pastaTmp = System.getProperty("java.io.tmpdir");
+            this.raiz = pastaTmp + File.separator + "UpdateTg2Bizi" + File.separator + "DocumentosOnboarding";
+            System.out.println("⚠️ PLANO B REFORMULADO: Usando caminho temporário seguro: " + this.raiz);
         } else {
             System.out.println("✅ PLANO A: Usando caminho do application.properties: " + this.raiz);
         }
@@ -33,10 +34,9 @@ public class DiscoLocal implements Disco {
         // Garante a criação da pasta independente de qual plano foi escolhido
         try {
             Files.createDirectories(Paths.get(this.raiz));
+            System.out.println("📁 Diretório verificado/criado com sucesso em: " + this.raiz);
         } catch (IOException e) {
-            // throw new RuntimeException("Não foi possível inicializar o diretório de
-            // arquivos.", e);
-            System.err.println("❌ Erro crítico de permissão: " + e.getMessage());
+            System.err.println("❌ Erro crítico de permissão ao criar diretório: " + e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class DiscoLocal implements Disco {
             throw new RuntimeException("Erro ao deletar arquivo.");
         }
     }
-    
+
     public String getRaiz() {
         return this.raiz;
     }
